@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <link rel="icon" href="logoo.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direktori Room | Phoenix Gaming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  
+  <style>
+    :root {
+      --bg: #05060c; --panel: #0b0f1a; --accent: #7b5cff; --accent-2: #25d7fd; --accent-3: #ff5c8a; --text: #e7ecff; --muted: #9da8c9; --glow: 0 0 18px rgba(123, 92, 255, 0.4), 0 0 36px rgba(37, 215, 253, 0.25);
+    }
+    * { scroll-behavior: smooth; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; min-height: 100vh; overflow-x: hidden; }
+    .grid { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px); background-size: 140px 140px; mask-image: radial-gradient(circle at 50% 50%, black, transparent 68%); opacity: 0.6; z-index: -1; }
+    
+    nav { backdrop-filter: blur(12px); background: rgba(5, 6, 12, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    .navbar-brand { font-weight: 700; color: var(--text); }
+    
+    .panel { background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent), var(--panel); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; box-shadow: 0 10px 50px rgba(0, 0, 0, 0.45); }
+    .neon-border { border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 0 18px rgba(123, 92, 255, 0.2); border-radius: 14px; }
+
+    /* Room Button Sidebar */
+    .room-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--muted); transition: all 0.3s ease; min-width: 70px; font-size: 0.9rem; }
+    .room-btn:hover { border-color: var(--accent-2); color: var(--text); background: rgba(37, 215, 253, 0.1); transform: translateY(-2px); }
+    .room-btn.active { background: linear-gradient(120deg, rgba(123, 92, 255, 0.4), rgba(37, 215, 253, 0.4)); border-color: var(--accent-2); color: white; font-weight: 600; box-shadow: 0 0 15px rgba(37, 215, 253, 0.4); }
+    
+    .section-title { font-weight: 700; }
+    .badge-soft { background: rgba(37, 215, 253, 0.18); border: 1px solid rgba(37, 215, 253, 0.35); color: var(--text); padding: 8px 14px; border-radius: 999px; font-weight: 600; font-size: 0.9rem; }
+    
+    /* Gallery Styles */
+    .gallery-img { width: 100%; height: 250px; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.3s; cursor: pointer; }
+    .gallery-img:hover { transform: scale(1.02); border-color: var(--accent-2); }
+    
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <i class="bi bi-arrow-left-circle"></i>
+        <span>Phoenix Gaming</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top: 120px; padding-bottom: 50px;">
+    <div class="text-center mb-5">
+      <h1 class="section-title mb-2">Room Gallery</h1>
+      <p class="text-white-50">Pilih room untuk melihat foto fasilitas dan interior.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Sidebar Room List -->
+      <div class="col-lg-4">
+        <div class="panel p-4 neon-border sticky-top" style="top: 100px; z-index: 10;">
+          
+          <!-- Reguler Section -->
+          <h6 class="text-white-50 text-uppercase small mb-2">Reguler Area</h6>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <button class="btn room-btn" onclick="selectRoom('reguler', this)">Area</button>
+          </div>
+
+          <!-- Simulator Section -->
+          <h6 class="text-white-50 text-uppercase small mb-2">Simulator</h6>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+             <button class="btn room-btn" onclick="selectRoom('sim1', this)">Simulator</button>
+          </div>
+
+          <!-- VIP Section -->
+          <h6 class="text-white-50 text-uppercase small mb-2">VIP Room</h6>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <button class="btn room-btn" onclick="selectRoom('vip1', this)">VIP</button>
+          </div>
+
+          <!-- VVIP Section -->
+          <h6 class="text-white-50 text-uppercase small mb-2">VVIP Suite</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn room-btn" onclick="selectRoom('vvip1', this)">VVIP</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Main Content: Photo Gallery -->
+      <div class="col-lg-8">
+        <div class="panel p-4 neon-border">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="section-title mb-0" id="gallery-title">Pilih Room</h4>
+            <span class="text-white-50 small" id="photo-count">0 Photos</span>
+          </div>
+          
+          <div id="gallery-container" class="row g-3">
+             <div class="col-12 text-center py-5 text-white-50">
+                <i class="bi bi-images display-4 d-block mb-3"></i>
+                Silakan pilih room di sebelah kiri untuk melihat foto.
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Lightbox for Image -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-body p-0">
+          <img src="" id="modalImage" class="img-fluid rounded-3 w-100">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Data Room Gallery
+    // Ganti URL gambar dengan foto asli ruangan Anda
+    const roomData = {
+      reguler: {
+        title: "Reguler Area",
+        desc: "Area open space dengan 16 unit PS5 & PS4. Suasana neon futuristik.",
+        photos: [
+          "img/reg/reg-1.jpg",
+          "img/reg/reg-2.jpg",
+          "img/reg/reg-3.jpg",
+          "img/reg/reg-4.jpg",
+          "img/reg/reg-5.jpg",
+          "img/reg/reg-6.jpg",
+          "img/reg/reg-7.jpg",
+          "img/reg/reg-8.jpg",
+          "img/reg/reg-9.jpg",
+        ]
+      },
+      sim1: {
+        title: "Simulator",
+        desc: "Rig simulator dengan Direct Drive dan Monitor Triple Screen.",
+        photos: [
+          "img/sim/sim-1.jpg",
+          "img/sim/sim-2.jpg",
+          "img/sim/sim-3.jpg",
+          "img/sim/sim-4.jpg",
+          "img/sim/sim-5.jpg",         
+        ]
+      },
+      vip1: {
+        title: "VIP Room",
+        desc: "Ruangan privat dengan sofa premium dan Smart TV 55 inch.",
+        photos: [
+          "img/vip/vip1.jpg",
+          "img/vip/vip2.jpg",
+          "img/vip/vip3.jpg",
+        ]
+      },
+      vvip1: {
+        title: "VVIP Suite",
+        desc: "Suite mewah dengan kapasitas 6 orang, PS5 & Switch, Beanbag.",
+        photos: [
+          "img/vvip/vvip-1.jpg",
+          "img/vvip/vvip-2.jpg",
+          "img/vvip/vvip-3.jpg",
+          "img/vvip/vvip-4.jpg",
+          "img/vvip/vvip-5.jpg",
+          "img/vvip/vvip-6.jpg",
+          "img/vvip/vvip-7.jpg",
+        ]
+      },
+    };
+
+    const galleryContainer = document.getElementById("gallery-container");
+    const galleryTitle = document.getElementById("gallery-title");
+    const photoCount = document.getElementById("photo-count");
+    const modalImage = document.getElementById("modalImage");
+    const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+
+    function selectRoom(id, btnElement) {
+      // Handle active state
+      document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      const room = roomData[id];
+      if (!room) return;
+
+      // Update Title
+      galleryTitle.innerText = room.title;
+      photoCount.innerText = `${room.photos.length} Photos`;
+
+      // Render Photos
+      galleryContainer.innerHTML = '';
+
+      if (room.photos.length === 0) {
+        galleryContainer.innerHTML = `<div class="col-12 text-center text-white-50 py-5">Belum ada foto.</div>`;
+        return;
+      }
+
+      room.photos.forEach((url, i) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 fade-in';
+        col.style.animationDelay = `${i * 0.1}s`;
+        
+        col.innerHTML = `
+          <img src="${url}" alt="${room.title} Photo ${i+1}" class="gallery-img" onclick="openImage('${url}')">
+        `;
+        galleryContainer.appendChild(col);
+      });
+      
+      // Add description below title
+      const descDiv = document.createElement('div');
+      descDiv.className = 'col-12 mb-3 fade-in';
+      descDiv.innerHTML = `<p class="text-white-50">${room.desc}</p>`;
+      galleryContainer.prepend(descDiv);
+    }
+
+    function openImage(url) {
+      modalImage.src = url;
+      imageModal.show();
+    }
+  </script>
+</body>
+</html>

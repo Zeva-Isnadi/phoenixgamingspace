@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <link rel="icon" href="logoo.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direktori Game & Room | Phoenix Gaming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  
+  <style>
+    :root {
+      --bg: #05060c;
+      --panel: #0b0f1a;
+      --accent: #7b5cff;
+      --accent-2: #25d7fd;
+      --accent-3: #ff5c8a;
+      --text: #e7ecff;
+      --muted: #9da8c9;
+      --glow: 0 0 18px rgba(123, 92, 255, 0.4), 0 0 36px rgba(37, 215, 253, 0.25);
+    }
+
+    * { scroll-behavior: smooth; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 140px 140px;
+      mask-image: radial-gradient(circle at 50% 50%, black, transparent 68%);
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    nav {
+      backdrop-filter: blur(12px);
+      background: rgba(5, 6, 12, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .navbar-brand { font-weight: 700; color: var(--text); }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent), var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .neon-border {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 18px rgba(123, 92, 255, 0.2);
+    }
+
+    .room-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      transition: all 0.3s ease;
+      min-width: 80px;
+    }
+    .room-btn:hover {
+      border-color: var(--accent-2);
+      color: var(--text);
+      background: rgba(37, 215, 253, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(37, 215, 253, 0.2);
+    }
+    .room-btn.active {
+      background: linear-gradient(120deg, rgba(123, 92, 255, 0.4), rgba(37, 215, 253, 0.4));
+      border-color: var(--accent-2);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(37, 215, 253, 0.4);
+    }
+
+    .section-title { font-weight: 700; }
+
+    .badge-soft {
+      background: rgba(37, 215, 253, 0.18);
+      border: 1px solid rgba(37, 215, 253, 0.35);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .nav-tabs-custom {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .nav-tabs-custom .nav-link {
+      border: none;
+      color: var(--muted);
+      background: transparent;
+      padding: 10px 20px;
+      font-weight: 600;
+      position: relative;
+    }
+    .nav-tabs-custom .nav-link.active {
+      color: var(--accent-2);
+      background: transparent;
+    }
+    .nav-tabs-custom .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-2);
+      box-shadow: 0 0 8px var(--accent-2);
+    }
+
+    .game-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+    }
+    .game-chip {
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <i class="bi bi-arrow-left-circle"></i>
+        <span>Phoenix Gaming</span>
+      </a>
+      <div class="ms-auto">
+        <a href="https://wa.me/6282237717805" target="_blank" class="btn btn-sm" style="background: linear-gradient(120deg, rgba(123, 92, 255, 0.25), rgba(37, 215, 253, 0.25)); border: 1px solid rgba(255,255,255,0.15); color: white;">
+          <i class="bi bi-whatsapp"></i> Booking
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top: 120px; padding-bottom: 50px;">
+    
+    <div class="text-center mb-5">
+      <h1 class="section-title mb-2">Game Directory</h1>
+      <p class="text-white-50">Pilih tipe ruangan, lalu pilih nomor booth untuk melihat game yang tersedia.</p>
+    </div>
+
+    <!-- Room Type Selector -->
+    <ul class="nav nav-tabs-custom justify-content-center mb-4" id="roomTypeTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="reguler-tab" type="button" onclick="changeRoomType('reguler')">Reguler</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="simulator-tab" type="button" onclick="changeRoomType('simulator')">Simulator</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="vip-tab" type="button" onclick="changeRoomType('vip')">VIP</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="vvip-tab" type="button" onclick="changeRoomType('vvip')">VVIP</button>
+      </li>
+    </ul>
+
+    <div class="row g-4">
+      <!-- Sidebar Room List -->
+      <div class="col-lg-4">
+        <div class="panel p-4 neon-border sticky-top" style="top: 100px; z-index: 10;">
+          <h5 class="mb-3" id="room-selector-title">Pilih Room Reguler</h5>
+          <div id="room-buttons-container" class="d-flex flex-wrap gap-2"></div>
+          
+          <div class="mt-4 pt-3 border-top border-secondary">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-white-50 small">Room Dipilih:</span>
+              <span class="badge-soft" id="selected-room-label">-</span>
+            </div>
+            <p class="small text-white-50 mb-0" id="room-description">Pilih room di sebelah kanan untuk melihat detail game.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content: Game List -->
+      <div class="col-lg-8">
+        <div class="panel p-4 neon-border">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="section-title mb-0">Daftar Game</h4>
+            <span class="text-white-50 small" id="game-count">0 Games</span>
+          </div>
+          
+          <div id="game-list-container" class="row g-4">
+             <div class="col-12 text-center py-5 text-white-50">
+                <i class="bi bi-controller display-4 d-block mb-3"></i>
+                Silakan pilih room terlebih dahulu.
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // --- DATA GAME (MASTER LIST) ---
+    const games = [
+      // --- GAME LAMA (Tetap dipertahankan) ---
+      { title: "EA FC 26", genre: "Sports", tags: ["Multiplayer", "Online"], image: "https://d2ya09u1z2qlgr.cloudfront.net/public/storage/article/August2025/pIbeXZ1nSbB8sfnOGQm8.webp", type: ["reguler", "vip", "vvip"] },
+      { title: "E-Football", genre: "Sports", tags: ["Multiplayer", "Online"], image: "https://www.konami.com/efootball/s/img/main_page_1_sp.png?v=919", type: ["reguler", "vip", "vvip"] },
+      { title: "UFC 5", genre: "Sports", tags: ["Fighting", "Sports"], image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeeTJFxvYrWUOd78OHFaLK-H3FHyvN1b2t1Q&s", type: ["reguler", "vip", "vvip"] },
+      { title: "Tekken 8", genre: "Fighting", tags: ["Versus", "Arcade"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202212/2101/CxnQHVI3gzboBTHqEEQVWZJ6.png", type: ["reguler", "vip", "vvip"] },
+      { title: "Moto GP 25", genre: "Racing", tags: ["Racing", "Sports"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202502/1416/64c4f30575fc7885e92b6647f37270965cbfc3db8aef15f5.jpg", type: ["reguler", "simulator"] },
+      { title: "F1 24", genre: "Racing", tags: ["Racing", "Sim"], image: "https://cdn1.epicgames.com/offer/edffc5fcc62140a7afd239d9e65df463/EGS_F124_Codemasters_S2_1200x1600-4640c5c849df939a2303ab872d618530", type: ["reguler", "simulator"] },
+      { title: "GTA V", genre: "Action", tags: ["Open World", "Story"], image: "https://upload.wikimedia.org/wikipedia/id/a/a5/Grand_Theft_Auto_V.png", type: ["reguler", "vip", "vvip"] },
+      { title: "God Of War Ragnarok", genre: "Action RPG", tags: ["Story", "Single"], image: "https://i.pinimg.com/736x/ec/f4/04/ecf404c4cded91e164f3133c64d74e77.jpg", type: ["reguler", "vip", "vvip"] },
+      { title: "Mortal Kombat 1", genre: "Fighting", tags: ["Versus", "Action"], image: "https://static.wikia.nocookie.net/mkwikia/images/4/41/MK1_%282023%29_Cover_Art.jpeg/revision/latest/scale-to-width-down/1200?cb=20230804010326", type: ["reguler", "vip", "vvip"] },
+      { title: "It Takes Two", genre: "Co-op", tags: ["Couple", "Adventure"], image: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1426210/capsule_616x353.jpg?t=1763484491", type: ["reguler", "vip", "vvip"] },
+      { title: "Marvel Spiderman", genre: "Action", tags: ["Superhero", "Open World"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202009/3021/BtsjAgHT9pqHRXtN9FCk7xc8.png", type: ["reguler", "vip"] },
+      { title: "Overcooked", genre: "Casual", tags: ["Co-op", "Fun"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202009/2915/PjDeOJk0Ka8oaSJjx8SM9Ozf.jpg", type: ["reguler", "vip", "vvip"] },
+      { title: "Red Dead Redemption", genre: "Action", tags: ["Open World", "Story"], image: "https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg", type: ["reguler", "vip"] },
+      { title: "Astro Playroom", genre: "Casual", tags: ["Platformer", "Fun"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202502/1908/3d17c33239dab88c7e2f24af50140b3f6fa555e6030d5704.png", type: ["reguler"] },
+      { title: "Spider-Man Miles Morales", genre: "Action", tags: ["Superhero", "PS5"], image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817190/capsule_616x353.jpg?t=1763569499", type: ["reguler", "vip", "vvip"] },
+      { title: "Spiderman 2", genre: "Action", tags: ["Superhero", "PS5"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/e66c4ae18c5d8e3986a24599b293162a6f5c9eba22968d2c.jpg", type: ["reguler", "vip", "vvip"] },
+      { title: "Ratchet & Clank", genre: "Action", tags: ["Platformer", "Adventure"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202101/2921/DwVjpbKOsFOyPdNzmSTSWuxG.png", type: ["reguler", "vip"] },
+      { title: "Insurgency", genre: "FPS", tags: ["Tactical", "Multiplayer"], image: "https://cdn1.epicgames.com/salesEvent/salesEvent/EGS_InsurgencySandstormbasegame_NewWorldInteractive_Editions_S1_2560x1440-ad297a516ee88bc43fd232fb3b224c98", type: ["reguler"] },
+      { title: "WWE 2k25", genre: "Sports", tags: ["Wrestling", "Multiplayer"], image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2878960/76d35961f8a4e857b88a6c50bef901a1f87c23dc/capsule_616x353.jpg?t=1770054352", type: ["reguler"] },
+      { title: "A Little to the Left", genre: "Puzzle", tags: ["Casual", "Relaxing"], image: "https://i.ytimg.com/vi/rr2C2qq52Uo/maxresdefault.jpg", type: ["reguler"] },
+      { title: "Resident Evil Village", genre: "Horror", tags: ["Survival", "Story"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202101/0812/FkzwjnJknkrFlozkTdeQBMub.png", type: ["reguler", "vip"] },
+      { title: "Last of Us Part 1", genre: "Action", tags: ["Story", "Survival"], image: "https://cdn1.epicgames.com/offer/0c40923dd1174a768f732a3b013dcff2/EGS_TheLastofUsPartI_NaughtyDogLLC_S2_1200x1600-41d1b88814bea2ee8cb7986ec24713e0", type: ["reguler", "vip"] },
+      { title: "Until Dawn", genre: "Horror", tags: ["Story", "Interactive"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202401/2910/d48262b72a5a2daa3ca3aed6c8f42c44f3fdaf2902265a13.png", type: ["reguler", "vip"] },
+      { title: "Fortnite", genre: "Battle Royale", tags: ["Multiplayer", "Online"], image: "https://cdn1.epicgames.com/offer/fn/FNECO_39-40_LoveAndLegends_EGS_Launcher_KeyArt_Blade_1200x1600_1200x1600-cdc1736f1f3141f7a0a3aa2946e6ec12", type: ["reguler", "vvip"] },
+      { title: "A Way Out", genre: "Action", tags: ["Co-op", "Story"], image: "https://image.api.playstation.com/cdn/UP0006/CUSA07995_00/8eeJWw4N0PAKHsManMjJM14wn1g1CdTSGyeGOrBr6Iq9oaDRRDGWFc6IAzm4475X.png", type: ["reguler", "vip"] },
+      { title: "Another Crab's Treasure", genre: "Adventure", tags: ["Soulslike", "Fun"], image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/01/Another_Crab%27s_Treasure_poster.webp/250px-Another_Crab%27s_Treasure_poster.webp.png", type: ["reguler"] },
+      { title: "Hogwarts Legacy", genre: "RPG", tags: ["Open World", "Magic"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202503/2716/f6b1e4512ee6061913f7d604da8f5f39566be56ca32a68ee.png", type: ["reguler", "vvip"] },
+      { title: "Silent Hill 2", genre: "Horror", tags: ["Survival", "Remake"], image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2124490/capsule_616x353.jpg?t=1744248682", type: ["reguler", "vip"] },
+      { title: "Sackboy", genre: "Platformer", tags: ["Co-op", "Fun"], image: "https://image.api.playstation.com/vulcan/img/rnd/202010/1614/TJiBEQMJ9qa93lWBu4sKScY9.png", type: ["reguler", "vvip"] },
+      { title: "Demon Souls", genre: "RPG", tags: ["Soulslike", "Hard"], image: "https://image.api.playstation.com/vulcan/img/rnd/202011/1717/GemRaOZaCMhGxQ9dRhnQQyT5.png", type: ["reguler", "vip"] },
+      { title: "Lego Horizon", genre: "Action", tags: ["Adventure", "Fun"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202406/0615/355d94a0a02dbe64dba8e85f65d2346187f6fb0f494897ad.jpg", type: ["reguler", "vip"] },
+      { title: "Last Of Us Part 2", genre: "Action", tags: ["Story", "Survival"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202312/0117/315718bce7eed62e3cf3fb02d61b81ff1782d6b6cf850fa4.png", type: ["reguler", "vip"] },
+      { title: "Cyber Punk 2077", genre: "RPG", tags: ["Open World", "Sci-Fi"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNFj9C00giTzYtH8PF1.png", type: ["reguler", "vvip"] },
+      { title: "Ghost Of Tsushima", genre: "Action", tags: ["Open World", "Samurai"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202010/0222/b3iB2zf2xHj9shC0XDTULxND.png", type: ["reguler", "vip"] },
+      { title: "Poppy Playtime", genre: "Horror", tags: ["Survival", "Puzzle"], image: "https://cdn1.epicgames.com/spt-assets/465c0f6c95d04b1c86b280b4925fee2d/poppy-playtime-14phl.jpg", type: ["reguler"] },
+      { title: "Detroit", genre: "Adventure", tags: ["Interactive", "Story"], image: "https://image.api.playstation.com/vulcan/img/rnd/202010/2119/W83G1nGF7wGs2J7Cq3LhpwwI.png", type: ["reguler", "vip"] },
+      { title: "Unravel Two", genre: "Puzzle", tags: ["Co-op", "Platformer"], image: "https://image.api.playstation.com/cdn/UP0006/CUSA10483_00/KveSmlMj7AifLXRLbqyZFgb95CrUE67H364kIk3DDRH7D5c9RQDWe6hPWTdtWCF1.png", type: ["reguler", "vip"] },
+      
+      // --- GAME LAMA (Master List) ---
+      { title: "Gran Turismo 7", genre: "Racing", tags: ["VR", "4K", "Sim"], image: "https://upload.wikimedia.org/wikipedia/en/1/14/Gran_Turismo_7_cover_art.jpg", type: ["simulator", "vip", "vvip"] },
+      { title: "Forza Horizon 5", genre: "Racing", tags: ["Open World", "Arcade"], image: "https://upload.wikimedia.org/wikipedia/en/8/86/Forza_Horizon_5_cover_art.jpg", type: ["simulator"] },
+      { title: "Genshin Impact", genre: "RPG", tags: ["Gacha", "Open World"], image: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/Genshin_Impact_logo.svg/1200px-Genshin_Impact_logo.svg.png", type: ["vvip"] },
+      { title: "Mario Kart 8 Deluxe", genre: "Racing", tags: ["Fun", "Party"], image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/46/Mario_Kart_8_Deluxe_box_art.jpg/250px-Mario_Kart_8_Deluxe_box_art.jpg", type: ["vvip"] },
+
+      // --- GAME BARU (Update Link & List Room 11-16) ---
+      { title: "CTR Nitro Fueled", genre: "Racing", tags: ["Kart", "Fun"], image: "https://image.api.playstation.com/vulcan/img/cfn/113071bXAqeGB5C-ya_hJO6-OUGLFOWLUeWRPimU4ZSIU4FIpTpxjVDSG2Dfj0kr7v63e_sq6tr33m0vunZiuVQva6YjHHKz.png", type: ["reguler"] },
+      { title: "UFC 4", genre: "Sports", tags: ["Fighting", "PS4"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202304/1709/d7cdecd137b89048c25f8a08c9a537792be5d3afec03002a.png", type: ["reguler"] },
+      { title: "PES 2026", genre: "Sports", tags: ["Football", "PS4"], image: "https://img.lazcdn.com/g/ff/kf/Sb490f4b775a342e9bf245bcbd1fe1d4an.jpg_720x720q80.jpg", type: ["reguler"] },
+      { title: "Jump Force", genre: "Fighting", tags: ["Anime", "Versus"], image: "https://image.api.playstation.com/cdn/EP0700/CUSA11638_00/YniQV0EU0SKtKU24sYPF69X7VyhGjHveZVXrO0MvVGgMXaKv6FRjoiQPkSqYh1IS.png", type: ["reguler"] },
+      { title: "Naruto X Boruto Ultimate Ninja", genre: "Fighting", tags: ["Anime", "Versus"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202307/3109/bdb73d2dba10170b2d6cd705858c446c48e3308584aa2c8b.jpg", type: ["reguler"] },
+      { title: "NBA 2K26", genre: "Sports", tags: ["Basketball", "Sports"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202506/2509/ec1eec85d9130210701491db769cb9874cc09f6512ebca20.png", type: ["reguler"] },
+      { title: "WWE 2K26", genre: "Sports", tags: ["Wrestling", "PS4"], image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcmXCeFE_PxXwRMoSWXverZRLsLn7Ejr1DQg&s", type: ["reguler"] },
+      { title: "Call of Duty: Black Ops 4", genre: "FPS", tags: ["Shooter", "Multiplayer"], image: "https://image.api.playstation.com/vulcan/img/cfn/11307-_3gXhUE8UsInLZftq2TO-HZBZYjRKFVIhfMWSoW3toofIyj_LJS_gFZcYc4OBTA-5gBOGI2a4pVO-wqWlE-CYQh24C.png", type: ["reguler"] },
+      { title: "Lego Jurassic World", genre: "Adventure", tags: ["Fun", "Co-op"], image: "https://image.api.playstation.com/cdn/UP1018/CUSA01513_00/lyvr8YhDKQYdERYG40uyVK0QY3SEpaT4XRlIPj51v2OV1RT9eVQeb6w10TgUPufj.png", type: ["reguler"] },
+      { title: "Minecraft", genre: "Sandbox", tags: ["Survival", "Creative"], image: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b6/Minecraft_2024_cover_art.png/250px-Minecraft_2024_cover_art.png", type: ["reguler"] },
+      { title: "Tekken 7", genre: "Fighting", tags: ["Versus", "PS4"], image: "https://upload.wikimedia.org/wikipedia/id/1/17/Official_Tekken_7_Logo.jpg", type: ["reguler"] },
+      { title: "Uncharted 4", genre: "Action", tags: ["Adventure", "Story"], image: "https://upload.wikimedia.org/wikipedia/id/1/1a/Uncharted_4_box_artwork.jpg", type: ["reguler"] },
+      { title: "Mortal Kombat 2", genre: "Fighting", tags: ["Classic", "Versus"], image: "https://lombard24.ee/storage/products/29926/normal/883e4a42-1dff-42b2-8681-7ba01a75d269.jpg", type: ["reguler"] },
+      { title: "Mortal Kombat 11", genre: "Fighting", tags: ["Versus", "PS4"], image: "https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,f_auto,q_auto:best,w_640/v1555590341/mned0yzkzkjs3fzqwlvg.jpg", type: ["reguler"] },
+      { title: "Resident Evil 4 Remake", genre: "Horror", tags: ["Survival", "Action"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202210/0712/BiS5QP6h4506JHyJlZlVzK9D.jpg", type: ["reguler"] },
+      { title: "Marvel vs Capcom Infinite", genre: "Fighting", tags: ["Versus", "Superhero"], image: "https://cdn-www.bluestacks.com/bs-images/GameTile_Marvel-vs-Capcom-Infinite.jpg", type: ["reguler"] },
+      { title: "Red Dead Redemption 2", genre: "Action", tags: ["Open World", "Story"], image: "https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png?w=440", type: ["reguler"] },
+      { title: "Assassin's Creed Mirage", genre: "Action", tags: ["Adventure", "Open World"], image: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/MTA-139312278/sony_ps5_assassin-s_creed_mirage_-_assassin_full01_gnofvvug.jpg", type: ["reguler"] },
+      { title: "Monopoly", genre: "Casual", tags: ["Board Game", "Fun"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202110/2907/33W7jKlA3MtWC8fNMDQKsa6K.png", type: ["reguler"] },
+      { title: "Lego Batman 3", genre: "Action", tags: ["Fun", "Co-op"], image: "https://upload.wikimedia.org/wikipedia/en/2/2d/Lego_Batman_3_-_Beyond_Gotham_cover.jpg", type: ["vip", "vvip"] },
+     { title: "Nintendo", genre: "Action", tags: ["Fun", "Co-op"], image: "https://down-id.img.susercontent.com/file/54a04557b02cd0faf7921ef548443d24", type: ["vip", "vvip"] },
+      // --- GAME SIMULATOR (UPDATE & BARU) ---
+      // Update Image Monster Jam
+      { title: "Monster Jam", genre: "Racing", tags: ["Trucks", "Sports"], image: "https://cdn1.epicgames.com/offer/42c70202dc684966a827bfcb7b49ac5f/EGS_MonsterJamShowdown_MilestoneSrl_S1_2560x1440-f23945d70170675c8df2defe13956957", type: ["reguler", "simulator"] },
+      // Update Image NFS Heat
+      { title: "Need for Speed Heat", genre: "Racing", tags: ["Arcade", "Cars"], image: "https://upload.wikimedia.org/wikipedia/en/7/7f/Cover_Art_of_Need_for_Speed_Heat.png", type: ["reguler", "simulator"] },
+      
+      // Game Simulator Baru
+      { title: "Dirt Rally 2.0", genre: "Racing", tags: ["Sim", "Off-road"], image: "https://static.wikia.nocookie.net/cmr/images/7/7b/DirtRally2_cover.jpg/revision/latest?cb=20180926135346", type: ["simulator"] },
+      { title: "Test Drive Unlimited", genre: "Racing", tags: ["Open World", "Arcade"], image: "https://placehold.co/600x400/222/fff?text=Test+Drive+Unlimited", type: ["simulator"] },
+      { title: "WRC", genre: "Racing", tags: ["Rally", "Sim"], image: "https://m.media-amazon.com/images/I/915zszm+UHL._AC_UF1000,1000_QL80_.jpg", type: ["simulator"] },
+      { title: "Assetto Corsa", genre: "Racing", tags: ["Sim", "Realistic"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202006/0821/BslGKgFzwgNgHGD1YiXr5kOf.png", type: ["simulator"] },
+      { title: "The Crew 2", genre: "Racing", tags: ["Open World", "Arcade"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202307/2708/28833b618429cfe5f65d24ea11933ae62e3308ea7d2015be.png", type: ["simulator"] },
+      { title: "Asphalt Legends", genre: "Racing", tags: ["Arcade", "Arcade"], image: "https://image.api.playstation.com/vulcan/ap/rnd/202507/2411/e3f206f6cabbc1c5d7768703419f89dca322ff2f688bb43e.png", type: ["simulator"] }
+    ];
+
+    const roomConfig = {
+      reguler: { count: 16, prefix: "REG", title: "Reguler", desc: "Area open space dengan PS5, cocok untuk solo atau duo gaming." },
+      simulator: { count: 2, prefix: "SIM", title: "Simulator", desc: "Rig direct drive & motion platform untuk pengalaman balap maksimal." },
+      vip: { count: 4, prefix: "VIP", title: "VIP", desc: "Booth private dengan AC, sofa premium, dan privasi terjaga." },
+      vvip: { count: 3, prefix: "VVIP", title: "VVIP", desc: "Ruang suite mewah, kapasitas besar, tersedia PS5 & Nintendo Switch." }
+    };
+
+    // Mapping List Game Spesifik Per Room
+    const roomSpecificLists = {
+        'reguler1': ["EA FC 26", "E-Football", "UFC 5", "Tekken 8", "Moto GP 25", "F1 24", "GTA V", "God Of War Ragnarok", "Mortal Kombat 1", "It Takes Two", "Marvel Spiderman", "Overcooked", "Red Dead Redemption", "Astro Playroom"],
+        'reguler2': ["E-Football", "EA FC 26", "Astro Playroom", "Mortal Kombat 1", "UFC 5", "It Takes Two", "Ratchet & Clank", "Insurgency", "God Of War Ragnarok", "Spider-Man Miles Morales", "Red Dead Redemption", "Overcooked", "Moto GP 25", "GTA V"],
+        'reguler3': ["EA FC 26", "Astro Playroom", "Red Dead Redemption", "WWE 2k25", "A Little to the Left", "Insurgency", "UFC 5", "GTA V", "E-Football", "It Takes Two", "Resident Evil Village", "Spider-Man Miles Morales", "Overcooked"],
+        'reguler4': ["EA FC 26", "Last of Us Part 1", "Mortal Kombat 1", "E-Football", "UFC 5", "God Of War Ragnarok", "Spiderman 2", "It Takes Two", "Until Dawn", "GTA V", "Astro Playroom", "Overcooked", "Red Dead Redemption"],
+        'reguler5': ["Moto GP 25", "Red Dead Redemption", "Last of Us Part 1", "UFC 5", "EA FC 26", "E-Football", "Fortnite", "Insurgency", "Spider-Man Miles Morales", "God Of War Ragnarok", "A Way Out", "Another Crab's Treasure", "Astro Playroom", "Hogwarts Legacy", "Overcooked", "It Takes Two", "Silent Hill 2", "Sackboy"],
+        'reguler6': ["EA FC 26", "Insurgency", "Moto GP 25", "E-Football", "It Takes Two", "A Way Out", "UFC 5", "GTA V", "Unravel Two", "Overcooked", "Astro Playroom", "Demon Souls", "Ratchet & Clank", "Red Dead Redemption"],
+        'reguler7': ["EA FC 26", "E-Football", "UFC 5", "Moto GP 25", "It Takes Two", "Mortal Kombat 1", "Red Dead Redemption", "GTA V", "Lego Horizon", "Insurgency", "Astro Playroom", "Demon Souls", "Spider-Man Miles Morales", "Overcooked", "Ratchet & Clank"],
+        'reguler8': ["Moto GP 25", "UFC 5", "Overcooked", "Ratchet & Clank", "Silent Hill 2", "Until Dawn", "Lego Horizon", "E-Football", "It Takes Two", "A Way Out", "Astro Playroom", "Detroit", "EA FC 26", "GTA V", "Insurgency", "Red Dead Redemption"],
+        'reguler9': ["E-Football", "Spider-Man Miles Morales", "Cyber Punk 2077", "It Takes Two", "EA FC 26", "Last Of Us Part 2", "Ghost Of Tsushima", "GTA V", "Overcooked", "Poppy Playtime", "Astro Playroom", "Detroit", "Hogwarts Legacy", "Insurgency", "Red Dead Redemption"],
+        'reguler10': ["It Takes Two", "UFC 5", "EA FC 26", "E-Football", "Monster Jam", "Silent Hill 2", "Mortal Kombat 1", "A Way Out", "Ratchet & Clank", "Unravel Two", "Overcooked", "Another Crab's Treasure", "Until Dawn", "Red Dead Redemption", "GTA V", "Insurgency"],
+        'reguler11': ["CTR Nitro Fueled", "EA FC 26", "UFC 4", "PES 2026", "GTA V", "It Takes Two", "Jump Force", "Moto GP 25", "Naruto X Boruto Ultimate Ninja", "NBA 2K26", "Overcooked", "Astro Playroom", "WWE 2K26"],
+        'reguler12': ["CTR Nitro Fueled", "EA FC 26", "UFC 4", "PES 2026", "God Of War Ragnarok", "Gran Turismo 7", "GTA V", "It Takes Two", "Minecraft", "Mortal Kombat 11", "Moto GP 25", "NBA 2K26", "Overcooked", "Resident Evil 4 Remake", "Astro Playroom"],
+        'reguler13': ["Call of Duty: Black Ops 4", "CTR Nitro Fueled", "EA FC 26", "PES 2026", "Ghost Of Tsushima", "God Of War Ragnarok", "GTA V", "It Takes Two", "Lego Jurassic World", "Spider-Man Miles Morales", "Minecraft", "Moto GP 25", "Naruto X Boruto Ultimate Ninja", "Need for Speed Heat", "Tekken 7", "Astro Playroom", "Uncharted 4"],
+        'reguler14': ["A Way Out", "CTR Nitro Fueled", "EA FC 26", "God Of War Ragnarok", "GTA V", "It Takes Two", "Marvel vs Capcom Infinite", "Marvel Spiderman", "NBA 2K26", "Red Dead Redemption 2", "Tekken 7", "Astro Playroom"],
+        'reguler15': ["Astro Playroom", "EA FC 26", "UFC 5", "E-Football", "God Of War Ragnarok", "It Takes Two", "Spider-Man Miles Morales", "Monopoly", "Moto GP 25", "Overcooked", "Ratchet & Clank", "Red Dead Redemption", "Sackboy", "Last of Us Part 1","Nintendo"],
+        'reguler16': ["Assassin's Creed Mirage", "Astro Playroom", "EA FC 26", "UFC 5", "E-Football", "God Of War Ragnarok", "It Takes Two", "Mortal Kombat 1", "Moto GP 25", "Overcooked", "Last Of Us Part 2","Nintendo"],
+
+        // --- UPDATE VVIP (1-3) ---
+        'vvip1': ["E-Football", "Astro Playroom", "EA FC 26", "Lego Horizon", "Mortal Kombat 1", "A Way Out", "UFC 5", "It Takes Two", "Spider-Man Miles Morales", "Unravel Two", "Sackboy", "Overcooked", "Ratchet & Clank", "Insurgency", "Lego Batman 3","Nintendo"],
+        'vvip2': ["E-Football", "Astro Playroom", "EA FC 26", "Lego Horizon", "Mortal Kombat 1", "A Way Out", "UFC 5", "It Takes Two", "Cyber Punk 2077", "Unravel Two", "Sackboy", "Overcooked", "Ratchet & Clank", "Red Dead Redemption", "God Of War Ragnarok", "GTA V","Nintendo"],
+        'vvip3': ["E-Football", "Astro Playroom", "EA FC 26", "Lego Horizon", "Mortal Kombat 1", "A Way Out", "UFC 5", "It Takes Two", "Last Of Us Part 2", "Moto GP 25", "Sackboy", "Overcooked", "Spider-Man Miles Morales", "God Of War Ragnarok", "GTA V","Nintendo"],
+
+        // --- UPDATE VIP (1-4) ---
+        'vip1': ["Astro Playroom", "EA FC 26", "UFC 5", "Ratchet & Clank", "E-Football", "It Takes Two", "Fortnite", "Until Dawn", "Overcooked", "Lego Horizon", "Unravel Two", "Sackboy","Nintendo"],
+        'vip2': ["Astro Playroom", "EA FC 26", "UFC 5", "Mortal Kombat 1", "Lego Horizon", "Last Of Us Part 2", "E-Football", "It Takes Two", "God Of War Ragnarok", "GTA V", "Lego Batman 3", "Spider-Man Miles Morales", "Overcooked", "Sackboy","Nintendo"],
+        'vip3': ["Unravel Two", "Last of Us Part 1", "God Of War Ragnarok", "UFC 5", "E-Football", "Astro Playroom", "EA FC 26", "Tekken 8", "Mortal Kombat 1", "It Takes Two", "Sackboy", "Ratchet & Clank", "Moto GP 25","Nintendo"],
+        'vip4': ["It Takes Two", "E-Football", "Mortal Kombat 1", "Ratchet & Clank", "Spider-Man Miles Morales", "Lego Horizon", "EA FC 26", "Unravel Two", "Sackboy", "Astro Playroom", "Red Dead Redemption", "UFC 5", "Silent Hill 2", "Nintendo"],
+
+        // --- UPDATE SIMULATOR (1-2) ---
+        'simulator1': ["Monster Jam", "Dirt Rally 2.0", "Test Drive Unlimited", "F1 24", "Gran Turismo 7", "Forza Horizon 5", "WRC", "Assetto Corsa", "The Crew 2", "Asphalt Legends", "Need for Speed Heat"],
+        'simulator2': ["Monster Jam", "Dirt Rally 2.0", "Test Drive Unlimited", "F1 24", "Gran Turismo 7", "Forza Horizon 5", "WRC", "Assetto Corsa", "The Crew 2", "Asphalt Legends", "Need for Speed Heat"]
+    };
+
+    let currentRoomType = 'reguler';
+    let selectedRoom = null;
+
+    // --- FUNCTIONS ---
+
+    function changeRoomType(type) {
+      currentRoomType = type;
+      selectedRoom = null;
+      const config = roomConfig[type];
+      
+      // Update UI Title
+      document.getElementById('room-selector-title').innerText = `Pilih Room ${config.title}`;
+      document.getElementById('selected-room-label').innerText = "-";
+      document.getElementById('room-description').innerText = config.desc;
+
+      // Update Active Tab
+      document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`${type}-tab`).classList.add('active');
+      
+      // Render Room Buttons
+      const container = document.getElementById('room-buttons-container');
+      container.innerHTML = '';
+      
+      for (let i = 1; i <= config.count; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'btn room-btn';
+        btn.innerText = `${config.prefix} ${i}`;
+        btn.onclick = () => selectRoom(i, btn);
+        container.appendChild(btn);
+      }
+      
+      // Reset Game List
+      document.getElementById('game-list-container').innerHTML = `
+         <div class="col-12 text-center py-5 text-white-50">
+            <i class="bi bi-hand-index-thumb display-4 d-block mb-3"></i>
+            Silakan klik salah satu tombol room di sebelah kiri.
+         </div>
+      `;
+      document.getElementById('game-count').innerText = "0 Games";
+    }
+
+    function selectRoom(index, btnElement) {
+      // Handle active state
+      document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      
+      const config = roomConfig[currentRoomType];
+      selectedRoom = `${config.prefix} ${index}`;
+      document.getElementById('selected-room-label').innerText = selectedRoom;
+      
+      let filteredGames = [];
+
+      // Cek apakah ada list spesifik untuk room ini
+      const specificKey = `${currentRoomType}${index}`;
+      if (roomSpecificLists[specificKey]) {
+          // Ambil judul game dari list spesifik
+          const titles = roomSpecificLists[specificKey];
+          // Filter game utama berdasarkan judul tersebut
+          filteredGames = games.filter(g => titles.includes(g.title));
+      } else {
+          // Jika tidak ada list spesifik, pakai logika lama
+          filteredGames = games.filter(g => g.type.includes(currentRoomType));
+      }
+      
+      renderGames(filteredGames);
+    }
+
+    function renderGames(data) {
+      const container = document.getElementById('game-list-container');
+      container.innerHTML = '';
+      
+      if (data.length === 0) {
+        container.innerHTML = `<div class="col-12 text-center text-white-50 py-5">Tidak ada game di kategori ini.</div>`;
+        return;
+      }
+
+      document.getElementById('game-count').innerText = `${data.length} Games`;
+
+      data.forEach((game, i) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 fade-in';
+        col.style.animationDelay = `${i * 0.05}s`;
+        
+        col.innerHTML = `
+          <div class="panel h-100 neon-border overflow-hidden game-card">
+             <img src="${game.image}" alt="${game.title}" class="game-card-img">
+             <div class="p-3">
+               <div class="d-flex justify-content-between align-items-start mb-2">
+                 <h5 class="fw-bold mb-0">${game.title}</h5>
+                 <span class="badge-soft" style="font-size:0.7rem; padding: 4px 8px;">${game.genre}</span>
+               </div>
+               <div class="d-flex flex-wrap gap-1">
+                 ${game.tags.map(t => `<span class="game-chip">${t}</span>`).join("")}
+               </div>
+             </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      changeRoomType('reguler');
+    });
+  </script>
+</body>
+</html>
